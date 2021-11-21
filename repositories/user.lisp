@@ -11,8 +11,9 @@
            #:update-user))
 (in-package #:blog/repositories/user)
 
-(defun select-users ()
-  (mito:select-dao 'user))
+(defun select-users (&key (per-page 10))
+  (mito:select-dao 'user
+    (limit per-page)))
 
 (defun find-user (&key id)
   (apply #'mito:find-dao 'user
