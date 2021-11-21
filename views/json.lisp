@@ -2,8 +2,6 @@
   (:use #:cl
         #:utopian
         #:utopian/views)
-  (:import-from #:assoc-utils
-                #:alist)
   (:import-from #:mito)
   (:import-from #:blog/utils/models
                 #:as-alist)
@@ -21,9 +19,9 @@
   ((object :initarg :object))
   (:metaclass json-view-class)
   (:render (jojo:to-json
-            (etypecase object
-              (mito.dao.mixin:dao-class (as-alist object))
-              (alist object))
+            (if (typep object 'mito.dao.mixin:dao-class)
+                (as-alist object)
+                object)
             :from :alist)))
 
 (defun render-json (object)
