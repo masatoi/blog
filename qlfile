@@ -1,0 +1,12 @@
+git utopian https://github.com/fukamachi/utopian
+ql clack :latest
+git apispec https://github.com/cxxxr/apispec :branch develop
+
+git mito https://github.com/fukamachi/mito
+git mito-auth https://github.com/fukamachi/mito-auth
+git mito-attachment https://github.com/fukamachi/mito-attachment :branch fix/zs3-ignore-bucket-name
+git sxql https://github.com/fukamachi/sxql
+git cl-dbi https://github.com/fukamachi/cl-dbi
+ql postmodern :latest
+
+git uuid https://github.com/pokepay/uuid :branch v4-ironclad-urandom

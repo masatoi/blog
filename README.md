@@ -25,4 +25,3 @@ Listening on localhost:5000.
 Copyright (c) 2021 Satoshi Imai
 
 Licensed under the MIT License.
-# blog
