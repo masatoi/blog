@@ -42,3 +42,15 @@
  (:class qlot/source/git:source-git
   :initargs (:remote-url "https://github.com/pokepay/uuid" :branch "v4-ironclad-urandom")
   :version "git-f0d8e0577a564ce80b3e13a1a67d074ded02c8da"))
+("repl-utilities" .
+ (:class qlot/source/git:source-git
+  :initargs (:remote-url "https://github.com/m-n/repl-utilities.git")
+  :version "git-7e300df663177ea4581f4e7e9c601377881dd986"))
+("cl-interpol" .
+ (:class qlot/source/git:source-git
+  :initargs (:remote-url "https://github.com/edicl/cl-interpol")
+  :version "git-70a1137f41dd8889004dbab9536b1adeac2497aa"))
+("cl-debug-print" .
+ (:class qlot/source/ql:source-ql
+  :initargs (:%version :latest)
+  :version "ql-2021-10-21"))

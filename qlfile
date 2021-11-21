@@ -10,3 +10,6 @@ git cl-dbi https://github.com/fukamachi/cl-dbi
 ql postmodern :latest
 
 git uuid https://github.com/pokepay/uuid :branch v4-ironclad-urandom
+git repl-utilities https://github.com/m-n/repl-utilities.git
+git cl-interpol https://github.com/edicl/cl-interpol
+ql cl-debug-print :latest

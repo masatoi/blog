@@ -8,3 +8,4 @@
   (:controllers #P"../controllers/"))
 
 (route :GET "/" "root:index")
+(route :GET "/users" "users:listing")

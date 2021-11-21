@@ -1,6 +1,6 @@
 CREATE TABLE "user" (
-    "id" BIGSERIAL NOT NULL PRIMARY KEY,
     "name" VARCHAR(256) NOT NULL,
+    "uuid" VARCHAR(36) NOT NULL PRIMARY KEY,
     "created_at" TIMESTAMPTZ,
     "updated_at" TIMESTAMPTZ
 );
