@@ -8,6 +8,7 @@ git mito-attachment https://github.com/fukamachi/mito-attachment :branch fix/zs3
 git sxql https://github.com/fukamachi/sxql
 git cl-dbi https://github.com/fukamachi/cl-dbi
 ql postmodern :latest
+git cl-fluent-logger https://github.com/fukamachi/cl-fluent-logger :branch async-write
 
 git uuid https://github.com/pokepay/uuid :branch v4-ironclad-urandom
 git repl-utilities https://github.com/m-n/repl-utilities.git

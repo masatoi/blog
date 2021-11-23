@@ -20,11 +20,13 @@
 (defun listing (params)
   (declare (ignore params))
   (let ((users (select-users)))
-    (render-json (map 'vector #'as-alist users))))
+    (render-json `(("rows" . ,(mapcar #'as-alist users))))))
 
 (defun show (params)
-  (declare (ignore params))
-  (render-json (find-dao 'user)))
+  ;;(declare (ignore params))
+  #>params
+  (let ((id (cdr (assoc :uuid params))))
+    (render-json (or (find-user :id id) :null))))
 
 (defun create (params)
   (declare (ignore params))

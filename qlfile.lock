@@ -38,6 +38,10 @@
  (:class qlot/source/ql:source-ql
   :initargs (:%version :latest)
   :version "ql-2021-10-21"))
+("cl-fluent-logger" .
+ (:class qlot/source/git:source-git
+  :initargs (:remote-url "https://github.com/fukamachi/cl-fluent-logger" :branch "async-write")
+  :version "git-da617d242598c87653043f67608ee0aa18d48e48"))
 ("uuid" .
  (:class qlot/source/git:source-git
   :initargs (:remote-url "https://github.com/pokepay/uuid" :branch "v4-ironclad-urandom")

@@ -24,5 +24,13 @@
                 object)
             :from :alist)))
 
+(defmethod jojo:%to-json ((time local-time:timestamp))
+  (jojo:%to-json (local-time:format-timestring nil time :timezone local-time:+utc-zone+)))
+
+(defmethod jojo:%to-json ((object standard-object))
+  (let ((jojo:*from* :alist)
+        (jojo:*null-value* :null))
+    (jojo:%to-json (as-alist object))))
+
 (defun render-json (object)
   (render 'json-view :object object))
