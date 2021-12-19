@@ -1,6 +1,10 @@
+
+
+# Getting Started
+
+```
 $ ros install fukamachi/qlot
 $ ros install fukamachi/utopian
-
 $ utopian new blog
 
 Description: sample web app
@@ -48,12 +52,16 @@ Downloading http://beta.quicklisp.org/archive/closer-mop/2021-10-20/closer-mop-2
 Downloading http://beta.quicklisp.org/archive/named-readtables/2021-05-31/named-readtables-20210531-git.tgz
 ##########################################################################
 Successfully installed.
+```
 
 # qlfileを編集
 
+qlfile
+```
 git utopian https://github.com/fukamachi/utopian
 ql clack :latest
 git apispec https://github.com/cxxxr/apispec :branch develop
+```
 
 # qlot exec でREPLを起動(M-x slime-qlot-exec)
 
@@ -66,11 +74,26 @@ $ psql postgres
 
 ALTER USER blog WITH PASSWORD 'blog';
 
+psqlでユーザblog、パスワードblogでblogデータベースに接続できることを確認する。
+
+```
 psql -h localhost -U blog blog
+Password for user blog: 
+psql (12.9 (Ubuntu 12.9-0ubuntu0.20.04.1))
+SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, bits: 256, compression: off)
+Type "help" for help.
+```
+
+この段階ではまだテーブルは無い
+
+```
+blog=> \d
+Did not find any relations.
+```
 
 # テーブル定義
 
-#+begin_src lisp
+```lisp
 (defpackage #:blog/models/user
   (:use #:cl
         #:mito)
@@ -81,13 +104,13 @@ psql -h localhost -U blog blog
 (deftable user ()
   ((name :col-type (:varchar 256)
          :initform "")))
-#+end_src
+```
 
 # DBマイグレーション
 
 blog/config/environments/local でパスワードを設定しておく
 
-#+begin_src lisp
+```lisp
 (defpackage #:blog/config/environments/local
   (:use #:cl))
 (in-package #:blog/config/environments/local)
@@ -97,7 +120,7 @@ blog/config/environments/local でパスワードを設定しておく
                :database-name "blog"
                :username "blog"
                :password "blog"))))
-#+end_src
+```
 
 マイグレーションファイルを作る
 
