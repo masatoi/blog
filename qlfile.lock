@@ -14,6 +14,10 @@
  (:class qlot/source/git:source-git
   :initargs (:remote-url "https://github.com/cxxxr/apispec" :branch "develop")
   :version "git-0f93705b8d75a555d69bce79dced53a1a73f9297"))
+("sanitized-params" .
+ (:class qlot/source/git:source-git
+  :initargs (:project-name "sanitized-params" :remote-url "https://github.com/fukamachi/sanitized-params")
+  :version "git-a4ee3841b8df0ffdcd9b31baeba1d275e957db79"))
 ("mito" .
  (:class qlot/source/git:source-git
   :initargs (:remote-url "https://github.com/fukamachi/mito")

@@ -23,8 +23,6 @@
     (render-json `(("rows" . ,(mapcar #'as-alist users))))))
 
 (defun show (params)
-  ;;(declare (ignore params))
-  #>params
   (let ((id (cdr (assoc :uuid params))))
     (render-json (or (find-user :id id) :null))))
 

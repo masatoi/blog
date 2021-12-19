@@ -13,4 +13,6 @@
 (defmethod as-alist ((user user) &key includes excludes)
   (declare (ignore includes excludes))
   `(("id" . ,(object-uuid user))
-    ("name" . ,(user-name user))))
+    ("name" . ,(user-name user))
+    ("created_at" . ,(mito:object-created-at user))
+    ("updated_at" . ,(mito:object-updated-at user))))
