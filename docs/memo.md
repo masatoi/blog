@@ -4,7 +4,7 @@
 
 WebフレームワークUtopianには空のプロジェクトを作るコマンドが付属しているが、最低限の内容しか含まれないので、ある程度実用的なscaffoldとなるものが必要だと考えた。
 
-具体的な例として[叩き台となるリポジトリ(masatoi/blog)](https://github.com/masatoi/blog)を作った。プロジェクト名は仮にblogとしたが、これをベースに開発する場合はsedなどでblogから好きなアプリケーション名に置き換えてほしい。
+具体的な例として[叩き台となるリポジトリ(masatoi/blog)](https://github.com/masatoi/blog) を作った。プロジェクト名は仮にblogとしたが、これをベースに開発する場合はsedなどでblogから好きなアプリケーション名に置き換えてほしい。
 
 使っているツール群は以下のようなものになる(まだ含まれていないものもある)。
 - Lisp処理系: [SBCL](http://www.sbcl.org/)
@@ -50,14 +50,68 @@ $ qlot install
 ```
 これで`~/blog/.qlot`以下にプロジェクトローカルのQuicklispやGithubからライブラリがインストールされる。
 
+### qlfileについて
+
 qlfileを開くと、以下のような内容が記述されていることが分かる。`git`と書いてあるものはGithubからのインストールで、特定のブランチを指定することもできる。`ql`と書いてあるものはQuicklispからのインストールであることを意味する。
 
 ```
 git utopian https://github.com/fukamachi/utopian
 ql clack :latest
 git apispec https://github.com/cxxxr/apispec :branch develop
-git sanitized-params https://github.com/fukamachi/sanitized-params
 ```
+
+`qlot install`の実行により、`qlfile.lock`が生成され、実際にインストールされた各ライブラリのバージョンが記録されている。`qlfile.lock`を編集して再度`qlot install`を実行するとバージョンを変更したライブラリのみ再インストールされる。
+
+`qlfile.lock`の記載例
+```
+("quicklisp" .
+ (:class qlot/source/dist:source-dist
+  :initargs (:distribution "http://beta.quicklisp.org/dist/quicklisp.txt" :%version :latest)
+  :version "2021-10-21"))
+("utopian" .
+ (:class qlot/source/git:source-git
+  :initargs (:remote-url "https://github.com/fukamachi/utopian")
+  :version "git-c6ad73d5a9bba245ad7b747e7764c94e3ea0ba23"))
+("clack" .
+ (:class qlot/source/ql:source-ql
+  :initargs (:%version :latest)
+  :version "ql-2021-10-21"))
+("apispec" .
+ (:class qlot/source/git:source-git
+  :initargs (:remote-url "https://github.com/cxxxr/apispec" :branch "develop")
+  :version "git-0f93705b8d75a555d69bce79dced53a1a73f9297"))
+```
+
+# qlot exec でREPLを起動する
+
+qlotでインストールしたライブラリはプロジェクトローカルにあるので、それらをLisp処理系から読み込むためには`qlot exec`を使う必要がある。
+例えば開発環境としてlemを使う場合は、
+
+```
+$ qlot exec lem
+```
+
+としてlemを起動し、`M-x slime`としてSBCLを起動した後に
+
+```lisp
+(ql:quickload :blog)
+```
+
+とすると依存ライブラリを含めシステム全体をロードできる。
+
+Emacsを使っている場合は、
+
+```elisp
+(defun slime-qlot-exec (directory)
+  (interactive (list (read-directory-name "Project directory: ")))
+  (slime-start :program "qlot"
+               :program-args '("exec" "ros" "-S" "." "-L" "sbcl-bin" "-Q" "dynamic-space-size=1024" "-l" "~/.sbclrc" "run")
+               :directory directory
+               :name 'qlot
+               :env (list (concat "PATH="
+                                  (mapconcat 'identity exec-path ":")))))
+```
+のようなコマンドを設定ファイル内などで定義し、`M-x slime-qlot-exec`を入力する必要がある。
 
 ## DBの用意
 
@@ -67,39 +121,26 @@ git sanitized-params https://github.com/fukamachi/sanitized-params
 $ sudo apt install postgresql
 ```
 
-# qlfileを編集
+blogというデータベースと同名のユーザを作り、パスワードを設定する。
 
-qlfile
 ```
-git utopian https://github.com/fukamachi/utopian
-ql clack :latest
-git apispec https://github.com/cxxxr/apispec :branch develop
-```
-
-# qlot exec でREPLを起動(M-x slime-qlot-exec)
-
-# DBを作成
-
 $ createuser -d blog
 $ createdb blog
-
 $ psql postgres
 
 ALTER USER blog WITH PASSWORD 'blog';
+```
 
-psqlでユーザblog、パスワードblogでblogデータベースに接続できることを確認する。
+psqlでユーザblog、パスワードblogで、blogデータベースに接続できることを確認する。
+この段階ではまだテーブルは無い。
 
 ```
 psql -h localhost -U blog blog
-Password for user blog: 
+Password for user blog: blog
 psql (12.9 (Ubuntu 12.9-0ubuntu0.20.04.1))
 SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, bits: 256, compression: off)
 Type "help" for help.
-```
 
-この段階ではまだテーブルは無い
-
-```
 blog=> \d
 Did not find any relations.
 ```
