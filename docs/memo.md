@@ -1,57 +1,70 @@
+# Common Lispの実務で使っているAPIサーバの構成について
 
+この記事では自分が実務でCommon Lispで開発しているWebシステムのAPIサーバの構成について解説する。
 
-# Getting Started
+WebフレームワークUtopianには空のプロジェクトを作るコマンドが付属しているが、最低限の内容しか含まれないので、ある程度実用的なscaffoldとなるものが必要だと考えた。
+
+具体的な例として[叩き台となるリポジトリ(masatoi/blog)](https://github.com/masatoi/blog)を作った。プロジェクト名は仮にblogとしたが、これをベースに開発する場合はsedなどでblogから好きなアプリケーション名に置き換えてほしい。
+
+使っているツール群は以下のようなものになる(まだ含まれていないものもある)。
+- Lisp処理系: [SBCL](http://www.sbcl.org/)
+- 処理系マネージャ: [Roswell](https://github.com/roswell/roswell)
+- Webサーバ: [woo](https://github.com/fukamachi/woo)
+- HTTPクライアント: [Dexador](https://github.com/fukamachi/dexador)
+- バージョン固定化ツール: [qlot](https://github.com/fukamachi/qlot)
+- Webフレームワーク: [utopian](https://github.com/fukamachi/utopian)
+- DB: Postgresql + [cl-dbi](https://github.com/fukamachi/cl-dbi)(DBインターフェース) + [mito](https://github.com/fukamachi/mito)(O/Rマッパー)
+- テストフレームワーク: [Rove](https://github.com/fukamachi/rove)
+- ロガー: [cl-fluent-logger](https://github.com/pokepay/cl-fluent-logger)
+
+# サンプルプロジェクトの導入
+
+まずRoswellを導入している必要がある。Homebrewが使える環境では以下のようにする。
+その他の環境については[RoswellのGithub WikiのInstallの項](https://github.com/roswell/roswell/wiki/Installation)を参照するのがよい。
+
+```
+$ brew install roswell
+```
+
+rosコマンドが使えるようになったら最新のSBCLをインストールする。
+
+```
+$ ros install sbcl-bin
+```
+
+## 依存ライブラリのインストール
+
+次にRoswellを使って最新のqlotをインストールする。
 
 ```
 $ ros install fukamachi/qlot
-$ ros install fukamachi/utopian
-$ utopian new blog
+```
 
-Description: sample web app
-Author: Satoshi Imai
-Database [sqlite3]: postgres
-License: MIT
+これで`~/.roswell/bin`にパスが通っていればqlotコマンドが使えるようになっているはずだ。
+サンプルプロジェクトをcloneし、`qlot install`することで`qlfile`と`qlfile.lock`に書かれたライブラリがプロジェクトローカルにインストールされる。
 
-New project is created at '/home/wiz/blog/'.
-
+```
+$ git clone git@github.com:masatoi/blog.git
+$ cd blog
 $ qlot install
+```
+これで`~/blog/.qlot`以下にプロジェクトローカルのQuicklispやGithubからライブラリがインストールされる。
 
-Installing Quicklisp to /home/wiz/blog/.qlot/ ...
-; Fetching #<URL "http://beta.quicklisp.org/quicklisp.lisp">
-; 55.80KB
-==================================================
-57,144 bytes in 0.00 seconds (0.00KB/sec)
-Reading '/home/wiz/blog/qlfile'...
-Installing dist "quicklisp" version "2021-10-21".
-Downloading http://beta.quicklisp.org/dist/quicklisp/2021-10-21/releases.txt
-##########################################################################
-Downloading http://beta.quicklisp.org/dist/quicklisp/2021-10-21/systems.txt
-##########################################################################
-Installing dist "utopian" version "git-c6ad73d5a9bba245ad7b747e7764c94e3ea0ba23".
-Installing dist "clack" version "ql-2021-10-21".
-Downloading http://beta.quicklisp.org/archive/clack/2021-08-07/clack-20210807-git.tgz
-##########################################################################
-Loading '/home/wiz/blog/blog.asd'...
-Ensuring 12 dependencies installed.
-Downloading http://beta.quicklisp.org/archive/lack/2021-10-20/lack-20211020-git.tgz
-##########################################################################
-Downloading http://beta.quicklisp.org/archive/uiop/2021-08-07/uiop-3.3.5.tgz
-##########################################################################
-Downloading http://beta.quicklisp.org/archive/ironclad/2021-10-20/ironclad-v0.56.tgz
-##########################################################################
-Downloading http://beta.quicklisp.org/archive/bordeaux-threads/2020-06-10/bordeaux-threads-v0.8.8.tgz
-##########################################################################
-Downloading http://beta.quicklisp.org/archive/alexandria/2021-08-07/alexandria-20210807-git.tgz
-##########################################################################
-Downloading http://beta.quicklisp.org/archive/cl-ppcre/2019-05-21/cl-ppcre-20190521-git.tgz
-##########################################################################
-Downloading http://beta.quicklisp.org/archive/lsx/2021-10-20/lsx-20211020-git.tgz
-##########################################################################
-Downloading http://beta.quicklisp.org/archive/closer-mop/2021-10-20/closer-mop-20211020-git.tgz
-##########################################################################
-Downloading http://beta.quicklisp.org/archive/named-readtables/2021-05-31/named-readtables-20210531-git.tgz
-##########################################################################
-Successfully installed.
+qlfileを開くと、以下のような内容が記述されていることが分かる。`git`と書いてあるものはGithubからのインストールで、特定のブランチを指定することもできる。`ql`と書いてあるものはQuicklispからのインストールであることを意味する。
+
+```
+git utopian https://github.com/fukamachi/utopian
+ql clack :latest
+git apispec https://github.com/cxxxr/apispec :branch develop
+git sanitized-params https://github.com/fukamachi/sanitized-params
+```
+
+## DBの用意
+
+何らかの方法でPostgreSQLをインストールする。
+
+```
+$ sudo apt install postgresql
 ```
 
 # qlfileを編集
