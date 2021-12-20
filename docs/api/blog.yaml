@@ -69,7 +69,9 @@ paths:
   '/users/{user_id}':
     parameters:
       - schema:
-          type: integer
+          type: string
+          format: uuid
+          example: 09e4c9fd-33da-4e0e-a224-347040ee11f4
         name: user_id
         in: path
         description: Id of an existing user.
@@ -87,6 +89,12 @@ paths:
                 $ref: '#/components/schemas/User'
               examples:
                 example-1:
+                  value:
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                    name: string
+                    created_at: '2019-08-24T14:15:22Z'
+                    updated_at: '2019-08-24T14:15:22Z'
+                example-2:
                   value:
                     id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                     name: string
