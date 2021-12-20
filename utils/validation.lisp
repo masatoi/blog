@@ -1,15 +1,14 @@
 (defpackage #:blog/utils/validation
   (:use #:cl)
-  (:import-from #:mito)
-  (:import-from #:utopian)
-  (:import-from #:closer-mop)
-  (:import-from #:jonathan)
-  (:export #:as-alist))
+  (:import-from #:alexandria)
+  (:import-from #:assoc-utils
+                #:aget)
+  (:export #:with-request-parameters))
 (in-package #:blog/utils/validation)
 
-(eval-when-always
- (defun lisp-variable-to-request-parameter-name (name)
-   (format nil "~{~(~A~)~^_~}" (uiop:split-string (string name) :separator "-"))))
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defun lisp-variable-to-request-parameter-name (name)
+    (format nil "~{~(~A~)~^_~}" (uiop:split-string (string name) :separator "-"))))
 
 (defmacro with-request-parameters (bindings params &body body)
   (alexandria:once-only (params)
