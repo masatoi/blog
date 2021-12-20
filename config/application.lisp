@@ -48,7 +48,7 @@
                            (unless (or (typep e 'sanitized-params:validation-error)
                                        (typep e 'apispec:schema-object-error)
                                        (typep e 'apispec:parameter-validation-failed))
-                             ;; (logger :error :internal (payload-internal-error e))
+                             ;; TODO: call logger
                              (format t "internal error: ~A~%" e)))))
           (when-let (request (validate-request-if-defined-in-openapi env))
             (setf *request* request))
@@ -95,5 +95,6 @@
    (call-next-method)))
 
 (defmethod on-exception ((app blog-app) (c http-error))
-  #!c
-  (render-json c))
+  `(400
+    (:content-type "application/json")
+    (,(render-json c))))
