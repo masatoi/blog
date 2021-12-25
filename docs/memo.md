@@ -2,7 +2,7 @@
 
 この記事では自分が実務でCommon Lispで開発しているWebシステムのAPIサーバの構成について解説する。
 
-WebフレームワークUtopianには空のプロジェクトを作るコマンドが付属しているが、最低限の内容しか含まれないので、ある程度実用的なscaffoldとなるものが必要だと考えた。
+WebフレームワークUtopianには空のプロジェクトを作るコマンドが付属しているが、それによりできるプロジェクトには最低限の内容しか含まれないので、ある程度実用的なscaffoldとなるものが必要だと考えた。
 
 具体的な例として[叩き台となるリポジトリ(masatoi/blog)](https://github.com/masatoi/blog) を作った。プロジェクト名は仮にblogとしたが、これをベースに開発する場合はsedなどでblogから好きなアプリケーション名に置き換えてほしい。
 
@@ -60,9 +60,10 @@ ql clack :latest
 git apispec https://github.com/cxxxr/apispec :branch develop
 ```
 
-`qlot install`の実行により、`qlfile.lock`が生成され、実際にインストールされた各ライブラリのバージョンが記録されている。`qlfile.lock`を編集して再度`qlot install`を実行するとバージョンを変更したライブラリのみ再インストールされる。
+`qlot install`の初回実行時に`qlfile.lock`が生成され、実際にインストールされた各ライブラリのバージョンが記録される。これにより依存ライブラリのバージョンが固定化される。
+`qlfile.lock`を編集して再度`qlot install`を実行するとバージョンを変更したライブラリのみ再インストールされる。
 
-`qlfile.lock`の記載例
+`qlfile.lock`の記載例。Quicklispからインストールする場合は、どの時点のQuicklispリポジトリからインストールするかを指定できる。Githubからインストールする場合は特定のコミットのハッシュ値を指定できる。
 ```
 ("quicklisp" .
  (:class qlot/source/dist:source-dist
@@ -84,7 +85,7 @@ git apispec https://github.com/cxxxr/apispec :branch develop
 
 # qlot exec でREPLを起動する
 
-qlotでインストールしたライブラリはプロジェクトローカルにあるので、それらをLisp処理系から読み込むためには`qlot exec`を使う必要がある。
+qlotでインストールしたライブラリはプロジェクトローカルにあるので、それらをLisp処理系から読み込むためには`qlot exec`を使う。これは続くコマンドで起動されるLisp処理系のライブラリ参照パスをプロジェクトローカルに向ける効果がある。
 例えば開発環境としてlemを使う場合は、
 
 ```
@@ -111,21 +112,25 @@ Emacsを使っている場合は、
                :env (list (concat "PATH="
                                   (mapconcat 'identity exec-path ":")))))
 ```
-のようなコマンドを設定ファイル内などで定義し、`M-x slime-qlot-exec`を入力する必要がある。
+のようなコマンドを設定ファイル内などで定義し、`M-x slime-qlot-exec`をからSLIMEを起動することで同じことができる。
 
-## DBの用意
+`program-args`の部分にqlotコマンドの引数を指定しており、`ros run`でSBCLをヒープ領域指定オプション(`dynamic-space-size`)などを付けて起動していることが分かる。
 
-何らかの方法でPostgreSQLをインストールする。
+# DBの準備
+
+cl-dbiではSQLite3, PostgreSQL, MySQLに接続できる。ここでは実務で使っているPostgreSQLで話を進めることにする。
+
+まず何らかの方法でPostgreSQLをインストールする。
 
 ```
 $ sudo apt install postgresql
 ```
 
-blogというデータベースと同名のユーザを作り、パスワードを設定する。
+次にblogという名前のデータベースを作る。さらにデータベースと同名のユーザを作り、パスワードを設定する。
 
 ```
-$ createuser -d blog
 $ createdb blog
+$ createuser -d blog
 $ psql postgres
 
 ALTER USER blog WITH PASSWORD 'blog';
@@ -145,7 +150,12 @@ blog=> \d
 Did not find any relations.
 ```
 
-# テーブル定義
+## テーブル定義
+
+DBにテーブルを追加したり変更を加えるときには、まずmitoのテーブルクラスを定義/編集し、続いて`utopian generate migration`コマンドでマイグレーションファイルを生成する。
+このコマンドは`models/`以下のテーブルクラス定義の変更を検出し、対応するマイグレーションSQLをファイル`db/migrations/`以下に生成する。
+
+例えば`user`というテーブルクラスを新規に定義する場合、`models/user.lisp`というファイルを新規に作り、以下のような内容にする。
 
 ```lisp
 (defpackage #:blog/models/user
@@ -160,9 +170,11 @@ Did not find any relations.
          :initform "")))
 ```
 
-# DBマイグレーション
+なお Utopian は package-inferred-system の使用を前提としており、ファイル名やパスとパッケージ名が一致している必要があることに注意。
 
-blog/config/environments/local でパスワードを設定しておく
+### マイグレーションファイルの生成
+
+まず `config/environments/local.lisp` にDBへの接続情報を記載しておく。
 
 ```lisp
 (defpackage #:blog/config/environments/local
@@ -176,8 +188,9 @@ blog/config/environments/local でパスワードを設定しておく
                :password "blog"))))
 ```
 
-マイグレーションファイルを作る
+次にモデル層(`models/`)の変更差分からマイグレーションファイルを生成する。
 
+```
 $ .qlot/bin/utopian generate migration
 
 Loading model files...Done    
@@ -188,9 +201,15 @@ CREATE TABLE "user" (
     "updated_at" TIMESTAMPTZ
 );
 Successfully generated: db/migrations/20211121074550.up.sql
+```
 
-マイグレーションファイルを適用
+`db/migrations/20211121074550.up.sql` というファイルが新規に生成され、中身にはテーブル定義SQLが入っていることが分かる。
 
+この時点ではマイグレーションファイルができたのみでまだDBには変更が適用されていない。
+
+マイグレーションファイルを適用するには`utopian db migrate`コマンドを使う。
+
+```
 $ .qlot/bin/utopian db migrate
 
 Applying 'db/schema.sql'...
@@ -204,9 +223,10 @@ Applying 'db/schema.sql'...
     "version" VARCHAR(255) PRIMARY KEY,
     "applied_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
-WARNING:
-   PostgreSQL warning: relation "schema_migrations" already exists, skipping
+
 Successfully updated to the version "20211121074550".
+```
+
 
 # サーバ開始
 .qlot/bin/utopian server
