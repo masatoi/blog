@@ -20,6 +20,12 @@ Hunchentoot server is going to start.
 Listening on localhost:5000.
 ```
 
+## Run tests
+
+```
+$ .qlot/bin/rove blog.asd
+```
+
 ## License
 
 Copyright (c) 2021 Satoshi Imai
