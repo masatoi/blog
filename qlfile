@@ -1,5 +1,7 @@
 git utopian https://github.com/fukamachi/utopian
-ql clack :latest
+git woo https://github.com/fukamachi/woo
+git lack https://github.com/fukamachi/lack
+git clack https://github.com/fukamachi/clack
 git apispec https://github.com/cxxxr/apispec :branch develop
 git sanitized-params https://github.com/fukamachi/sanitized-params
 
@@ -15,3 +17,4 @@ git uuid https://github.com/pokepay/uuid :branch v4-ironclad-urandom
 git repl-utilities https://github.com/m-n/repl-utilities.git
 git cl-interpol https://github.com/edicl/cl-interpol
 ql cl-debug-print :latest
+git rove https://github.com/fukamachi/rove

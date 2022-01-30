@@ -6,6 +6,14 @@
  (:class qlot/source/git:source-git
   :initargs (:remote-url "https://github.com/fukamachi/utopian")
   :version "git-c6ad73d5a9bba245ad7b747e7764c94e3ea0ba23"))
+("woo" .
+ (:class qlot/source/git:source-git
+  :initargs (:remote-url "https://github.com/fukamachi/woo")
+  :version "git-aef6ea02dd08e4f11bd352dfa17fbc8db2dbc0b4"))
+("lack" .
+ (:class qlot/source/git:source-git
+  :initargs (:remote-url "https://github.com/fukamachi/lack")
+  :version "git-156ef010d5a90e629107b44661221b26b507d7ef"))
 ("clack" .
  (:class qlot/source/ql:source-ql
   :initargs (:%version :latest)
@@ -62,3 +70,7 @@
  (:class qlot/source/ql:source-ql
   :initargs (:%version :latest)
   :version "ql-2021-10-21"))
+("rove" .
+ (:class qlot/source/git:source-git
+  :initargs (:remote-url "https://github.com/fukamachi/rove")
+  :version "git-89a7406687c69c2d92796920b3f9a9bea77120a1"))
