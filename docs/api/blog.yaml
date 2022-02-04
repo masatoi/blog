@@ -105,7 +105,7 @@ paths:
       operationId: get-user
       description: Retrieve the information of the user with the matching user ID.
     patch:
-      summary: ''
+      summary: Update User Info by User ID
       tags:
         - User
       operationId: update-user-info
