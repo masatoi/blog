@@ -13,9 +13,11 @@
   (:export #:testing-api
            #:successp
            #:json-response-p
+           #:response-status
            #:response-body
            #:response-headers
-           #:alist-match))
+           #:alist-match
+           #:random-string))
 (in-package #:blog/tests/utils)
 
 (defmacro testing-api ((method uri &rest args &key headers content &allow-other-keys)
@@ -39,6 +41,9 @@
 
 (defun successp (response)
   (<= 200 (lack.response:response-status response) 299))
+
+(defun response-status (response)
+  (lack.response:response-status response))
 
 (defun json-response-p (response)
   (equal (gethash "content-type" (lack.response:response-headers response)) "application/json"))
@@ -74,3 +79,15 @@
               rules)
        (equalp (sort (mapcar #'car alist) #'string<=)
                (sort (mapcar #'car rules) #'string<=))))
+
+(defun random-char ()
+  (let ((*random-state* (make-random-state t)))
+    (ecase (random 3)
+      (0 (code-char (+ (char-code #\0) (random 10))))
+      (1 (code-char (+ (char-code #\a) (random 26))))
+      (2 (code-char (+ (char-code #\A) (random 26)))))))
+
+(defun random-string (&optional (length 40))
+  (let ((string (make-string length)))
+    (dotimes (i length string)
+      (setf (aref string i) (random-char)))))

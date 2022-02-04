@@ -248,16 +248,18 @@ DONE
 DONE
 
 # apispec導入
-TODO
+DONE
 
 # テストフレームワーク導入
-TODO
+DONE
 roveのインストール
 
 # ロガーの導入
 TODO
 fluentdの導入
 cl-fluent-loggerのインストール
+
+標準のロガーミドルウェア
 
 # より高速なサーバを導入する
 wooのインストール

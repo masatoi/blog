@@ -7,5 +7,7 @@
   :depends-on ("blog/main")
   :in-order-to ((test-op (test-op "blog/tests"))))
 
-(register-system-packages "lack-component" '(#:lack.component))
-(register-system-packages "lack-test" '(#:lack.test))
+(register-system-packages "lack-component" '(:lack.component))
+(register-system-packages "lack-request" '(:lack.request))
+(register-system-packages "lack-response" '(:lack.response))
+(register-system-packages "lack-test" '(:lack.test))

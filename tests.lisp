@@ -9,4 +9,7 @@
 (in-package #:blog/tests)
 
 (defmethod asdf:perform :after ((op asdf:test-op) (system (eql (asdf:find-system :blog/tests))))
-  (rove:run system))
+  (let* ((project-path (asdf:system-source-directory :blog))
+         (utopian:*config-dir* (merge-pathnames #P"config/environments/" project-path)))
+    (blog:connect-db)
+    (rove:run system)))
