@@ -7,6 +7,7 @@
   (:import-from #:cl-interpol)
   (:import-from #:blog/config/application)
   (:import-from #:blog/config/routes)
+  (:import-from #:blog/views)
   (:import-from #:clack)
   (:import-from #:utopian
                 #:config)

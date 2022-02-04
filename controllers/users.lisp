@@ -21,9 +21,10 @@
 (in-package #:blog/controllers/users)
 
 (defun listing (params)
-  (declare (ignore params))
-  (let ((users (select-users)))
-    (render-json `(("rows" . ,(mapcar #'as-alist users))))))
+  (with-request-parameters ((per-page :default 10))
+      params
+    (let ((users (select-users :per-page per-page)))
+      (render-json `(("rows" . ,(mapcar #'as-alist users)))))))
 
 (defun show (params)
   (with-request-parameters ((uuid :key :uuid))

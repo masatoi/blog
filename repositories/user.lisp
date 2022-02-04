@@ -13,7 +13,8 @@
 
 (defun select-users (&key (per-page 10))
   (mito:select-dao 'user
-    (limit per-page)))
+    (limit per-page)
+    (order-by (:desc :created_at))))
 
 (defun find-user (&key id)
   (apply #'mito:find-dao 'user

@@ -16,7 +16,7 @@
           (response)
         (ok (successp response))
         (ok (alist-match `(("name" . ,name)
-                           ("uuid" . ,(object-uuid user))
+                           ("id" . ,(object-uuid user))
                            ("created_at" . #'local-time:parse-timestring)
                            ("updated_at" . #'local-time:parse-timestring))
                          (response-body response)))))
