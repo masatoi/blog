@@ -53,6 +53,21 @@ $ .qlot/bin/rove blog.asd
 See
 https://github.com/fukamachi/qlot#working-with-slime
 
+```
+;; Start server
+(ql:quickload :blog)
+(blog:start-blog)
+
+;; Run tests
+(ql:quickload :rove)
+(blog:connect-db)
+(rove:run :blog/tests/functional/users/show)
+```
+
+## API
+
+https://contellas.stoplight.io/docs/blog/YXBpOjE3MzIxMjk4-blog
+
 ## License
 
 Copyright (c) 2021 Satoshi Imai
