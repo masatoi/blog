@@ -40,7 +40,14 @@ paths:
       operationId: get-users
       description: Get user list
       x-internal: false
-      parameters: []
+      parameters:
+        - schema:
+            type: integer
+            minimum: 1
+            maximum: 1000
+          in: query
+          name: per_page
+          description: Number of items per page
     post:
       summary: Create User
       tags:
