@@ -1,9 +1,12 @@
 (defpackage #:blog/app
   (:use #:cl
         #:blog/config/routes
-        #:blog/config/application))
+        #:blog/config/application)
+  (:import-from #:lack.component
+                #:to-app))
 (in-package #:blog/app)
 
-(make-instance 'blog-app
-               :routes *routes*
-               :models #P"models/")
+(to-app
+ (make-instance 'blog-app
+                :routes *routes*
+                :models #P"models/"))

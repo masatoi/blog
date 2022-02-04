@@ -18,13 +18,15 @@
 (in-package #:blog)
 
 (defvar *blog-app*)
+
+(setf utopian:*config-dir*
+      (merge-pathnames #P"config/environments/" (asdf:system-source-directory :blog)))
+
 (defun start-blog (&rest args &key (server :hunchentoot)
                                    (port 5000)
                                    (debug t)
                    &allow-other-keys)
   (declare (ignorable args))
-  (setf utopian:*config-dir*
-        (merge-pathnames #P"config/environments/" (asdf:system-source-directory :blog)))
   (setf *blog-app*
         (clack:clackup (merge-pathnames #P"app.lisp" (asdf:system-source-directory :blog))
                        :server server

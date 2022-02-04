@@ -4,12 +4,16 @@
   (:import-from #:uuid
                 #:make-v4-uuid)
   (:export #:uuid-pk-mixin
-           #:object-uuid))
+           #:object-uuid
+           #:generate-uuid))
 (in-package #:blog/models/mixin/uuid-pk)
+
+(defun generate-uuid ()
+  (format nil "~(~A~)" (make-v4-uuid)))
 
 (defclass uuid-pk-mixin ()
   ((uuid :col-type (:varchar 36)
-         :initform (format nil "~(~A~)" (make-v4-uuid))
+         :initform (generate-uuid)
          :accessor object-uuid
          :primary-key t))
   (:metaclass dao-table-mixin))

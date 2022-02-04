@@ -8,7 +8,7 @@
   (:controllers #P"../controllers/"))
 
 (route :GET "/" "root:index")
-
+(route :GET "/ping" "root:ping")
 (route :GET "/users" "users:listing")
 (route :GET "/users/:uuid" "users:show")
 (route :POST "/users" "users:create")

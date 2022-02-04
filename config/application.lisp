@@ -54,32 +54,38 @@
             (setf *request* request))
           (call-next-method))
       (sanitized-params:validation-error (e)
-        (setf (response-status *response*) 400)
-        (on-exception app
-                      (make-condition
-                       'invalid-parameters
-                       :error e
-                       :missing (missing-keys e)
-                       :invalid (invalid-keys e)
-                       :unpermitted (unpermitted-keys e))))
+        (setf (getf (response-headers *response*) :content-type) "application/json")
+        `(400
+          ,(response-headers *response*)
+          ,(on-exception app
+                         (make-condition
+                          'invalid-parameters
+                          :error e
+                          :missing (missing-keys e)
+                          :invalid (invalid-keys e)
+                          :unpermitted (unpermitted-keys e)))))
       (apispec:parameter-validation-failed (e)
-        (setf (response-status *response*) 400)
-        (on-exception app
-                      (make-condition
-                       'invalid-parameters
-                       :error e
-                       :missing (apispec:missing-parameters e)
-                       :invalid (mapcar #'car (apispec:invalid-parameters e))
-                       :unpermitted (apispec:unpermitted-parameters e))))
+        (setf (getf (response-headers *response*) :content-type) "application/json")
+        `(400
+          ,(response-headers *response*)
+          ,(on-exception app
+                         (make-condition
+                          'invalid-parameters
+                          :error e
+                          :missing (apispec:missing-parameters e)
+                          :invalid (mapcar #'car (apispec:invalid-parameters e))
+                          :unpermitted (apispec:unpermitted-parameters e)))))
       (apispec:schema-object-error (e)
-        (setf (response-status *response*) 400)
-        (on-exception app
-                      (make-condition
-                       'invalid-parameters
-                       :error e
-                       :missing (apispec:schema-object-error-missing-keys e)
-                       :invalid (apispec:schema-object-error-invalid-keys e)
-                       :unpermitted (apispec:schema-object-error-unpermitted-keys e)))))))
+        (setf (getf (response-headers *response*) :content-type) "application/json")
+        `(400
+          ,(response-headers *response*)
+          ,(on-exception app
+                         (make-condition
+                          'invalid-parameters
+                          :error e
+                          :missing (apispec:schema-object-error-missing-keys e)
+                          :invalid (apispec:schema-object-error-invalid-keys e)
+                          :unpermitted (apispec:schema-object-error-unpermitted-keys e))))))))
 
 (defmethod to-app ((app blog-app))
   (builder
@@ -95,6 +101,4 @@
    (call-next-method)))
 
 (defmethod on-exception ((app blog-app) (c http-error))
-  `(400
-    (:content-type "application/json")
-    (,(render-json c))))
+  (render-json c))
