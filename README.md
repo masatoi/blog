@@ -66,7 +66,7 @@ https://github.com/fukamachi/qlot#working-with-slime
 
 ## API
 
-https://contellas.stoplight.io/docs/blog/YXBpOjE3MzIxMjk4-blog
+https://contellas.stoplight.io/docs/blog-1/YXBpOjMyNjYyNjQz-blog
 
 ## License
 
