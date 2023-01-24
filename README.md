@@ -30,10 +30,12 @@ WITHOUT_MIDDLEWARE=1 .qlot/bin/utopian db migrate
 ## Run
 
 ```
+# Start server
 $ .qlot/bin/utopian server
 Hunchentoot server is going to start.
 Listening on localhost:5000.
 
+# Call from client
 $ curl localhost:5000/ping
 {"pong":"ok"}
 
