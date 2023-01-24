@@ -3,10 +3,14 @@
         #:blog/config/routes
         #:blog/config/application)
   (:import-from #:lack.component
-                #:to-app))
+                #:to-app)
+  (:import-from #:utopian/config
+                #:getenv))
 (in-package #:blog/app)
 
-(to-app
- (make-instance 'blog-app
-                :routes *routes*
-                :models #P"models/"))
+(let ((app (make-instance 'blog-app
+                          :routes *routes*
+                          :models #P"models/")))
+  (if (getenv "WITHOUT_MIDDLEWARE")
+      app
+      (to-app app)))

@@ -12,6 +12,21 @@ sample web app
 $ qlot install
 ```
 
+## Creating a database
+
+The following example assumes PostgreSQL.
+
+```
+# Create DB user
+createuser -d blog
+
+# Create DB (dbname = blog)
+WITHOUT_MIDDLEWARE=1 .qlot/bin/utopian db create
+
+# Migration
+WITHOUT_MIDDLEWARE=1 .qlot/bin/utopian db migrate
+```
+
 ## Run
 
 ```
