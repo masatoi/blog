@@ -34,7 +34,8 @@
                             (assoc-utils:alist (to-json ,content :from :alist)))))
          (lack.test:testing-app (clack:eval-file (asdf:system-relative-pathname :blog #P"app.lisp"))
            (multiple-value-bind (,response-body ,status ,response-headers)
-               (lack.test:request ,uri :method ,method :headers ,headers :content ,content
+               (lack.test:request (concatenate 'string "http://localhost:5000" ,uri)
+                                  :method ,method :headers ,headers :content ,content
                                   ,@(remove-from-plist args :headers :content))
              (let ((,response (lack.response:make-response ,status ,response-headers ,response-body)))
                ,@body)))))))
