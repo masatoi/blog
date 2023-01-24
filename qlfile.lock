@@ -1,7 +1,7 @@
 ("quicklisp" .
  (:class qlot/source/dist:source-dist
   :initargs (:distribution "http://beta.quicklisp.org/dist/quicklisp.txt" :%version :latest)
-  :version "2021-10-21"))
+  :version "2022-11-07"))
 ("utopian" .
  (:class qlot/source/git:source-git
   :initargs (:remote-url "https://github.com/fukamachi/utopian")
@@ -9,27 +9,23 @@
 ("woo" .
  (:class qlot/source/git:source-git
   :initargs (:remote-url "https://github.com/fukamachi/woo")
-  :version "git-aef6ea02dd08e4f11bd352dfa17fbc8db2dbc0b4"))
+  :version "git-181a838bc92d9fe224219bdd7e833f13159d5f95"))
 ("lack" .
  (:class qlot/source/git:source-git
   :initargs (:remote-url "https://github.com/fukamachi/lack")
-  :version "git-156ef010d5a90e629107b44661221b26b507d7ef"))
+  :version "git-22b37656799f534286f5c645602358bdcc7c1803"))
 ("clack" .
- (:class qlot/source/ql:source-ql
-  :initargs (:%version :latest)
-  :version "ql-2021-10-21"))
+ (:class qlot/source/git:source-git
+  :initargs (:remote-url "https://github.com/fukamachi/clack")
+  :version "git-39b4d1381e48c4e06236259e51f6fc742950d20d"))
 ("apispec" .
  (:class qlot/source/git:source-git
   :initargs (:remote-url "https://github.com/cxxxr/apispec" :branch "develop")
   :version "git-0f93705b8d75a555d69bce79dced53a1a73f9297"))
-("sanitized-params" .
- (:class qlot/source/git:source-git
-  :initargs (:project-name "sanitized-params" :remote-url "https://github.com/fukamachi/sanitized-params")
-  :version "git-a4ee3841b8df0ffdcd9b31baeba1d275e957db79"))
 ("mito" .
  (:class qlot/source/git:source-git
   :initargs (:remote-url "https://github.com/fukamachi/mito")
-  :version "git-47ba4865ca4bb2894b53703a49a299e973f8eb86"))
+  :version "git-840082bf4c2740ac043c7ea1f0814c53b8c6f0d7"))
 ("mito-auth" .
  (:class qlot/source/git:source-git
   :initargs (:remote-url "https://github.com/fukamachi/mito-auth")
@@ -45,15 +41,15 @@
 ("cl-dbi" .
  (:class qlot/source/git:source-git
   :initargs (:remote-url "https://github.com/fukamachi/cl-dbi")
-  :version "git-738a74dd69adb2a7c21fa67e140d89c7df25b227"))
+  :version "git-325c76dad69a48e9fe2ac68b50f195b00a00c805"))
 ("postmodern" .
  (:class qlot/source/ql:source-ql
   :initargs (:%version :latest)
-  :version "ql-2021-10-21"))
+  :version "ql-2022-11-07"))
 ("cl-fluent-logger" .
  (:class qlot/source/git:source-git
   :initargs (:remote-url "https://github.com/fukamachi/cl-fluent-logger" :branch "async-write")
-  :version "git-da617d242598c87653043f67608ee0aa18d48e48"))
+  :version "git-732f09d4a0b8b3415697920304095d546f3b5a8c"))
 ("uuid" .
  (:class qlot/source/git:source-git
   :initargs (:remote-url "https://github.com/pokepay/uuid" :branch "v4-ironclad-urandom")
@@ -65,12 +61,12 @@
 ("cl-interpol" .
  (:class qlot/source/git:source-git
   :initargs (:remote-url "https://github.com/edicl/cl-interpol")
-  :version "git-70a1137f41dd8889004dbab9536b1adeac2497aa"))
+  :version "git-d4f49d45257be1512db238a5c740e69a5964e93b"))
 ("cl-debug-print" .
  (:class qlot/source/ql:source-ql
   :initargs (:%version :latest)
-  :version "ql-2021-10-21"))
+  :version "ql-2022-11-07"))
 ("rove" .
  (:class qlot/source/git:source-git
   :initargs (:remote-url "https://github.com/fukamachi/rove")
-  :version "git-89a7406687c69c2d92796920b3f9a9bea77120a1"))
+  :version "git-9db9778f0c78393686aefea4691740447e9445d3"))

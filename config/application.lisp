@@ -12,11 +12,6 @@
   (:import-from #:cl-ppcre)
   (:import-from #:alexandria
                 #:when-let)
-  (:import-from #:sanitized-params
-                #:validation-error
-                #:missing-keys
-                #:invalid-keys
-                #:unpermitted-keys)
   (:export #:blog-app))
 (in-package #:blog/config/application)
 
@@ -45,25 +40,13 @@
     (handler-case
         (handler-bind ((error
                          (lambda (e)
-                           (unless (or (typep e 'sanitized-params:validation-error)
-                                       (typep e 'apispec:schema-object-error)
+                           (unless (or (typep e 'apispec:schema-object-error)
                                        (typep e 'apispec:parameter-validation-failed))
                              ;; TODO: call logger
                              (format t "internal error: ~A~%" e)))))
           (when-let (request (validate-request-if-defined-in-openapi env))
             (setf *request* request))
           (call-next-method))
-      (sanitized-params:validation-error (e)
-        (setf (getf (response-headers *response*) :content-type) "application/json")
-        `(400
-          ,(response-headers *response*)
-          ,(on-exception app
-                         (make-condition
-                          'invalid-parameters
-                          :error e
-                          :missing (missing-keys e)
-                          :invalid (invalid-keys e)
-                          :unpermitted (unpermitted-keys e)))))
       (apispec:parameter-validation-failed (e)
         (setf (getf (response-headers *response*) :content-type) "application/json")
         `(400

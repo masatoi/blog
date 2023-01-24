@@ -3,7 +3,6 @@ git woo https://github.com/fukamachi/woo
 git lack https://github.com/fukamachi/lack
 git clack https://github.com/fukamachi/clack
 git apispec https://github.com/cxxxr/apispec :branch develop
-git sanitized-params https://github.com/fukamachi/sanitized-params
 
 git mito https://github.com/fukamachi/mito
 git mito-auth https://github.com/fukamachi/mito-auth
