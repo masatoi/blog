@@ -8,6 +8,8 @@
                 #:getenv))
 (in-package #:blog/app)
 
+(swank:create-server :port 4005 :dont-close t)
+
 (let ((app (make-instance 'blog-app
                           :routes *routes*
                           :models #P"models/")))

@@ -9,7 +9,8 @@ sample web app
 ## Installation
 
 ```
-$ qlot install
+ros install masatoi/blog
+qlot install
 ```
 
 ## Creating a database
@@ -67,8 +68,7 @@ $ .qlot/bin/rove blog.asd
 
 ## Run with SLIME
 
-See
-https://github.com/fukamachi/qlot#working-with-slime
+See [this link](https://github.com/fukamachi/qlot#working-with-slime) to properly configure Emacs.
 
 ```
 ;; Start server
