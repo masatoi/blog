@@ -2,7 +2,8 @@
   (:use #:cl
         #:utopian
         #:blog/views/json
-        #:blog/errors/base)
+        #:blog/errors/base
+        #:blog/utils/prng)
   (:import-from #:lack.component
                 #:to-app
                 #:call)
@@ -72,6 +73,7 @@
 
 (defmethod to-app ((app blog-app))
   (builder
+   (:prng :fortuna :seed :urandom)
    (:static
     :path (lambda (path)
             (if (ppcre:scan "^(?:/assets/|/robot\\.txt$|/favicon\\.ico$)" path)
